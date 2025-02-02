@@ -1,0 +1,154 @@
+[gd_scene load_steps=21 format=3 uid="uid://des0t20fd15xr"]
+
+[ext_resource type="Script" path="res://world.gd" id="1_70rjs"]
+[ext_resource type="Script" path="res://Palette/PaletteEffect.gd" id="1_crcgp"]
+[ext_resource type="Shader" path="res://noise.gdshader" id="3_8wlrn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eecae"]
+
+[sub_resource type="Sky" id="Sky_wkjrr"]
+sky_material = SubResource("ProceduralSkyMaterial_eecae")
+
+[sub_resource type="Environment" id="Environment_o2ywv"]
+background_mode = 2
+sky = SubResource("Sky_wkjrr")
+tonemap_mode = 2
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_oqxcd"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_crcgp")
+
+[sub_resource type="Compositor" id="Compositor_dtxo0"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_oqxcd")])
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_l05dv"]
+size = Vector2(200, 200)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_snk77"]
+render_priority = 0
+shader = ExtResource("3_8wlrn")
+shader_parameter/albedo = Color(0.59, 0.484488, 0.3717, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(20, 20, 20)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0x5ym"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ge064"]
+albedo_color = Color(0.28, 0.532, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5rq5y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oy6wr"]
+albedo_color = Color(1, 0.35, 0.35, 1)
+metallic = 0.75
+roughness = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qiv58"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sipv1"]
+albedo_color = Color(0.3115, 1, 0.19, 1)
+roughness = 0.31
+
+[sub_resource type="Curve3D" id="Curve3D_eykp2"]
+_data = {
+"points": PackedVector3Array(0.00994968, 0, -3.59521, -0.00994968, 0, 3.59521, 10, 0, 0, 5.50779, 0, 0.125011, -5.50779, 0, -0.125011, 0, 0, 10, 0.0703726, 0, 4.62241, -0.0703726, 0, -4.62241, -10, 0, 0, -5.20637, 0, 0.0119982, 5.20637, 0, -0.0119982, 0, 2.03954, -10, -0.00994968, 0, -3.45422, 0.00994968, 0, 3.45422, 10, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Animation" id="Animation_wppyl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_snpev"]
+resource_name = "camera"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sorn6"]
+_data = {
+"RESET": SubResource("Animation_wppyl"),
+"camera": SubResource("Animation_snpev")
+}
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_70rjs")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_o2ywv")
+compositor = SubResource("Compositor_dtxo0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.885491, 0.156748, -0.43742, 0, 0.941382, 0.337342, 0.464657, -0.298713, 0.833586, 0, 3.92657, 0)
+shadow_enabled = true
+
+[node name="plane" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_l05dv")
+surface_material_override/0 = SubResource("ShaderMaterial_snk77")
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_0x5ym")
+surface_material_override/0 = SubResource("StandardMaterial3D_ge064")
+
+[node name="Sphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.01245, 1.72136, 0)
+mesh = SubResource("SphereMesh_5rq5y")
+surface_material_override/0 = SubResource("StandardMaterial3D_oy6wr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.36824, 0.902735, 0)
+mesh = SubResource("CylinderMesh_qiv58")
+surface_material_override/0 = SubResource("StandardMaterial3D_sipv1")
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+curve = SubResource("Curve3D_eykp2")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-0.999991, 0, 0.00276746, 0, 1, 0, -0.00276746, 0, -0.999991, 10, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Path3D/PathFollow3D"]
+transform = Transform3D(-0.536151, 0.469508, -0.701502, 0, 0.831043, 0.556209, 0.844122, 0.298212, -0.445564, 0, 0, 0)
+fov = 15.7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sorn6")
+}
+autoplay = "camera"

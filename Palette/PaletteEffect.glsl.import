@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cuxyoj5gfsnaj"
+path="res://.godot/imported/PaletteEffect.glsl-56b45a1d64fd5377b92ee128d8d25bab.res"
+
+[deps]
+
+source_file="res://Palette/PaletteEffect.glsl"
+dest_files=["res://.godot/imported/PaletteEffect.glsl-56b45a1d64fd5377b92ee128d8d25bab.res"]
+
+[params]
+

@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://3taoa34oc4q"]
+
+[ext_resource type="PackedScene" uid="uid://des0t20fd15xr" path="res://world.tscn" id="1_afbhx"]
+[ext_resource type="Shader" path="res://ScaledViewport.gdshader" id="1_esvsc"]
+[ext_resource type="Shader" path="res://CRT.gdshader" id="3_d42it"]
+[ext_resource type="Texture2D" uid="uid://b4x085ojhe04b" path="res://lionheart.png" id="3_wd5ds"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_govmo"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihjcm"]
+resource_local_to_scene = true
+shader = ExtResource("1_esvsc")
+shader_parameter/viewport = SubResource("ViewportTexture_govmo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_utg8f"]
+shader = ExtResource("3_d42it")
+shader_parameter/curvature = 10.0
+shader_parameter/vignette_width = 10.0
+shader_parameter/glow = 1.4
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(384, 216)
+
+[node name="Node3D" parent="SubViewport" instance=ExtResource("1_afbhx")]
+
+[node name="Control" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_ihjcm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("3_wd5ds")
+centered = false
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_utg8f")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
