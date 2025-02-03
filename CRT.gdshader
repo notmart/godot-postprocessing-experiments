@@ -13,7 +13,7 @@ void fragment() {
 	vec2 screen_size = vec2(textureSize(screen, 0));
 	vec2 pixel = vec2(1.0 / screen_size.x, 1.0 / screen_size.y);
 
-	vec2 uv = UV * 2.0 - 1.0;
+	vec2 uv = SCREEN_UV * 2.0 - 1.0;
 	vec2 sphere_offset = uv.yx / curvature;
 	uv = uv + uv * sphere_offset * sphere_offset;
 
@@ -22,9 +22,9 @@ void fragment() {
 
 	uv = uv * 0.5 + 0.5;
 
-	float scanline = sin(UV.y * (2.0 * PI) * (screen_size.y / 3.0)) * 0.5 + 0.5;
+	float scanline = sin(uv.y * (2.0 * PI) * (screen_size.y / 3.0)) * 0.5 + 0.5;
 	scanline *= scanline_strength;
-	float vertical_line = sin(UV.x * (2.0 * PI) * (screen_size.x / 2.0)) * 0.5 + 0.5;
+	float vertical_line = sin(uv.x * (2.0 * PI) * (screen_size.x / 2.0)) * 0.5 + 0.5;
 
 	vec4 light_area = texture(screen, uv) * 0.6 + texture(screen, uv + vec2(pixel.x, 0.0)) * 0.2 + texture(screen, uv + vec2(2.0 * pixel.x, 0.0)) * 0.2;
 	//light_area *= glow;
