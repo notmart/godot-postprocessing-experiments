@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://3taoa34oc4q"]
+[gd_scene load_steps=9 format=3 uid="uid://3taoa34oc4q"]
 
 [ext_resource type="PackedScene" uid="uid://des0t20fd15xr" path="res://world.tscn" id="1_afbhx"]
 [ext_resource type="Shader" path="res://ScaledViewport.gdshader" id="1_esvsc"]
+[ext_resource type="Script" path="res://ScaledViewport.gd" id="1_oaii5"]
 [ext_resource type="Shader" path="res://CRT.gdshader" id="3_d42it"]
 [ext_resource type="Texture2D" uid="uid://b4x085ojhe04b" path="res://lionheart.png" id="3_wd5ds"]
 
@@ -17,7 +18,10 @@ shader_parameter/viewport = SubResource("ViewportTexture_govmo")
 shader = ExtResource("3_d42it")
 shader_parameter/curvature = 10.0
 shader_parameter/vignette_width = 10.0
-shader_parameter/glow = 1.4
+shader_parameter/glow = 2.2
+shader_parameter/contrast = 2.0
+shader_parameter/saturation = 0.5
+shader_parameter/scanline_strength = 1.0
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -26,6 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_oaii5")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 size = Vector2i(384, 216)
