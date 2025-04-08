@@ -30,7 +30,7 @@ void fragment() {
 	//light_area *= glow;
 	//light_area = (light_area - 0.5) * contrast + 0.5;
 	light_area *= max(vec4(1.0), glow * (1.0 - light_area));
-	
+
 	float average = (light_area.r + light_area.g + light_area.b) / 3.0;
 	float xd = average - light_area.r;
 	float yd = average - light_area.g;
@@ -38,12 +38,12 @@ void fragment() {
 	light_area.r += xd * -saturation;
 	light_area.g += yd * -saturation;
 	light_area.b += zd * -saturation;
-	
+
 	vec4 dark_area = light_area * 0.4 + texture(screen, uv + vec2(0.0, pixel.y)) * 0.3 + texture(screen, uv - vec2(0.0, pixel.y)) * 0.3;
 	dark_area *= dark_area * glow;
-	
+
 	vec4 blur = max(vec4(0.0), textureLod(screen, uv, 1.0) * 4.0 - 2.0);
-	
+
 	COLOR = vec4(0.0);
 	COLOR = mix(light_area, dark_area, scanline);
 	COLOR = mix(COLOR, vec4(vertical_line), 0.02);

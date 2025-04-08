@@ -1,8 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://des0t20fd15xr"]
+[gd_scene load_steps=30 format=3 uid="uid://des0t20fd15xr"]
 
-[ext_resource type="Script" path="res://world.gd" id="1_70rjs"]
-[ext_resource type="Script" path="res://Palette/PaletteEffect.gd" id="1_crcgp"]
-[ext_resource type="Shader" path="res://noise.gdshader" id="3_8wlrn"]
+[ext_resource type="Script" uid="uid://pp0syajxvnus" path="res://world.gd" id="1_70rjs"]
+[ext_resource type="Script" uid="uid://hiia22uiwhpa" path="res://Palette/PaletteEffect.gd" id="1_crcgp"]
+[ext_resource type="Texture2D" uid="uid://chv70sq3quvn8" path="res://Palette/palette.png" id="2_voqty"]
+[ext_resource type="Shader" uid="uid://c1ro4gljpir2o" path="res://noise.gdshader" id="3_8wlrn"]
+[ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://proto_controller.tscn" id="3_36xkr"]
+[ext_resource type="PackedScene" uid="uid://wjqvwxf47fgf" path="res://Assets/dungeon/dungeon_assets/building/floor_stone.glb" id="4_oyvvo"]
+[ext_resource type="PackedScene" uid="uid://va4h65d4kfre" path="res://Assets/dungeon/dungeon_assets/building/wall.glb" id="5_a8iyw"]
+[ext_resource type="PackedScene" uid="uid://2fgl77jqwidx" path="res://Assets/dungeon/dungeon_assets/building/wall_window_closed.glb" id="7_msppe"]
+[ext_resource type="PackedScene" uid="uid://drxhs0g4elt84" path="res://Assets/dungeon/dungeon_assets/props/coin_stack.glb" id="8_0vc3n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eecae"]
 
@@ -22,6 +28,7 @@ effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_crcgp")
+palette = ExtResource("2_voqty")
 
 [sub_resource type="Compositor" id="Compositor_dtxo0"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_oqxcd")])
@@ -29,19 +36,31 @@ compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_oqxc
 [sub_resource type="PlaneMesh" id="PlaneMesh_l05dv"]
 size = Vector2(200, 200)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_aepau"]
+frequency = 0.055
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e5ehi"]
+seamless = true
+noise = SubResource("FastNoiseLite_aepau")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_snk77"]
 render_priority = 0
 shader = ExtResource("3_8wlrn")
 shader_parameter/albedo = Color(0.59, 0.484488, 0.3717, 1)
+shader_parameter/texture_noise = SubResource("NoiseTexture2D_e5ehi")
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = null
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
 shader_parameter/specular = 0.5
 shader_parameter/metallic = 0.0
 shader_parameter/uv1_scale = Vector3(20, 20, 20)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/pinned_world_position = Vector3(0, 0, 0)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jty60"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0x5ym"]
 
@@ -102,8 +121,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sorn6"]
 _data = {
-"RESET": SubResource("Animation_wppyl"),
-"camera": SubResource("Animation_snpev")
+&"RESET": SubResource("Animation_wppyl"),
+&"camera": SubResource("Animation_snpev")
 }
 
 [node name="Node3D" type="Node3D"]
@@ -117,9 +136,18 @@ compositor = SubResource("Compositor_dtxo0")
 transform = Transform3D(0.885491, 0.156748, -0.43742, 0, 0.941382, 0.337342, 0.464657, -0.298713, 0.833586, 0, 3.92657, 0)
 shadow_enabled = true
 
+[node name="ProtoController" parent="." instance=ExtResource("3_36xkr")]
+can_sprint = true
+
 [node name="plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.643142, 0, 0)
 mesh = SubResource("PlaneMesh_l05dv")
 surface_material_override/0 = SubResource("ShaderMaterial_snk77")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="plane"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="plane/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_jty60")
 
 [node name="Cube" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -149,6 +177,20 @@ fov = 15.7
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_sorn6")
+&"": SubResource("AnimationLibrary_sorn6")
 }
 autoplay = "camera"
+
+[node name="floor_stone" parent="." instance=ExtResource("4_oyvvo")]
+
+[node name="floor_stone2" parent="." instance=ExtResource("4_oyvvo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="wall2" parent="." instance=ExtResource("5_a8iyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.928375, -4.76837e-07, -2.51925)
+
+[node name="wall_window_closed2" parent="." instance=ExtResource("7_msppe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09693, -4.76837e-07, -2.45633)
+
+[node name="coin_stack" parent="." instance=ExtResource("8_0vc3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.29757, 4.76837e-07, 2.06166)

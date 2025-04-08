@@ -4,6 +4,7 @@
 layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
 
 layout(rgba16f, set = 0, binding = 0) uniform image2D screen_tex;
+layout(set = 1, binding = 0) uniform sampler2D palette_tex;
 
 // Our push constant
 layout(push_constant, std430) uniform Params {
@@ -30,6 +31,7 @@ void main() {
 		return;
 	}
 
+
 	vec4 color = imageLoad(screen_tex, point);
 
 	//color.r = floor(color.r * 30.0) / 30.0;
@@ -44,7 +46,23 @@ void main() {
 	
 	//color = color + vec4(m, m, m, 1.0);
 	color += m;
-	color = floor(color * 15.0 - 0.5) / (15.0);
+	//color = floor(color * 15.0 - 0.5) / (15.0);
+
+	ivec2 paletteSize = ivec2(16);//textureSize(palette_tex);
+	vec4 bestColor = vec4(0.0);
+	float bestDistance = 99999.0;
+	for (int i = 0; i < paletteSize.x; i++) {
+		for (int j = 0; j < paletteSize.y; j++) {
+			vec4 palette_color = texture(palette_tex, vec2(float(i)/ float(paletteSize.x), float(j)/float(paletteSize.y)));
+			float dst = distance(color, palette_color);
+			//float dst = abs(color.r - palette_color.r);
+			if (dst < bestDistance) {
+				bestDistance = dst;
+				bestColor = palette_color;
+			}
+		}
+	}
+	color = bestColor;
 
 	imageStore(screen_tex, point, color);
 }
