@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://des0t20fd15xr"]
+[gd_scene load_steps=32 format=3 uid="uid://des0t20fd15xr"]
 
 [ext_resource type="Script" uid="uid://pp0syajxvnus" path="res://world.gd" id="1_70rjs"]
 [ext_resource type="Script" uid="uid://hiia22uiwhpa" path="res://Palette/PaletteEffect.gd" id="1_crcgp"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://c1ro4gljpir2o" path="res://noise.gdshader" id="3_8wlrn"]
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://proto_controller.tscn" id="3_36xkr"]
 [ext_resource type="PackedScene" uid="uid://wjqvwxf47fgf" path="res://Assets/dungeon/dungeon_assets/building/floor_stone.glb" id="4_oyvvo"]
+[ext_resource type="Script" uid="uid://d032uwqfkddlj" path="res://Edges/EdgeEffect.gd" id="4_wse8f"]
 [ext_resource type="PackedScene" uid="uid://va4h65d4kfre" path="res://Assets/dungeon/dungeon_assets/building/wall.glb" id="5_a8iyw"]
 [ext_resource type="PackedScene" uid="uid://2fgl77jqwidx" path="res://Assets/dungeon/dungeon_assets/building/wall_window_closed.glb" id="7_msppe"]
 [ext_resource type="PackedScene" uid="uid://drxhs0g4elt84" path="res://Assets/dungeon/dungeon_assets/props/coin_stack.glb" id="8_0vc3n"]
@@ -23,15 +24,25 @@ tonemap_mode = 2
 [sub_resource type="CompositorEffect" id="CompositorEffect_oqxcd"]
 resource_local_to_scene = false
 resource_name = ""
-enabled = true
+enabled = false
 effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_crcgp")
 palette = ExtResource("2_voqty")
 
+[sub_resource type="CompositorEffect" id="CompositorEffect_ic0uy"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = true
+script = ExtResource("4_wse8f")
+metadata/_custom_type_script = "uid://d032uwqfkddlj"
+
 [sub_resource type="Compositor" id="Compositor_dtxo0"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_oqxcd")])
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_oqxcd"), SubResource("CompositorEffect_ic0uy")])
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_l05dv"]
 size = Vector2(200, 200)

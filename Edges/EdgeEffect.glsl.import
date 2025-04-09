@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://c12twbqu351xq"
+path="res://.godot/imported/EdgeEffect.glsl-cd47c8e80888236db2dcef2913b7350d.res"
+
+[deps]
+
+source_file="res://Edges/EdgeEffect.glsl"
+dest_files=["res://.godot/imported/EdgeEffect.glsl-cd47c8e80888236db2dcef2913b7350d.res"]
+
+[params]
+
