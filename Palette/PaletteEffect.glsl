@@ -62,7 +62,8 @@ void main() {
 			}
 		}
 	}
-	color = bestColor;
+	//color = bestColor;
+	color = floor(color * 32.0 - 0.5) / (32.0);
 
 	imageStore(screen_tex, point, color);
 }

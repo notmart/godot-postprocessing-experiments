@@ -52,26 +52,26 @@ void main()
 	
 	float depth_diff = 0.0;
 	float neg_depth_diff = 0.5;
-	float depth = 1.0 - texelFetch(depth_tex, point, 0).r;
-	float du = 1.0 - texelFetch(depth_tex, point + ivec2(0, -1), 0).r;
-	float dl = 1.0 - texelFetch(depth_tex, point + ivec2(-1, 0), 0).r;
-	float dr = 1.0 - texelFetch(depth_tex, point + ivec2(1, 0), 0).r;
-	float dd = 1.0 - texelFetch(depth_tex, point + ivec2(0, -1), 0).r;
-	depth_diff += clamp(du - depth, 0., 1.);
-	depth_diff += clamp(dd - depth, 0., 1.);
-	depth_diff += clamp(dr - depth, 0., 1.);
-	depth_diff += clamp(dl - depth, 0., 1.);
+	float depth = texelFetch(depth_tex, point, 0).r;
+	float du = texelFetch(depth_tex, point + ivec2(0, 1), 0).r;
+	float dl = texelFetch(depth_tex, point + ivec2(-1, 0), 0).r;
+	float dr = texelFetch(depth_tex, point + ivec2(1, 0), 0).r;
+	float dd = texelFetch(depth_tex, point + ivec2(0, -1), 0).r;
+	depth_diff += clamp(depth - du, 0., 1.);
+	depth_diff += clamp(depth - dd, 0., 1.);
+	depth_diff += clamp(depth - dr, 0., 1.);
+	depth_diff += clamp(depth - dl, 0., 1.);
 	neg_depth_diff += depth - du;
 	neg_depth_diff += depth - dd;
 	neg_depth_diff += depth - dr;
 	neg_depth_diff += depth - dl;
 	neg_depth_diff = clamp(neg_depth_diff, 0., 1.);
 	neg_depth_diff = clamp(smoothstep(0.498, 0.502, neg_depth_diff)*10., 0., 1.);
-	depth_diff = smoothstep(0.0055, 0.0056, depth_diff);
+	depth_diff = smoothstep(0.00055, 0.00056, depth_diff);
 	//depth_diff = 0.1;
 	vec3 n = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point, 0)).rgb);
 	
-	vec3 nu = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point + ivec2(0, -1), 0)).rgb);
+	vec3 nu = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point + ivec2(0, 1), 0)).rgb);
 	vec3 nl = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point + ivec2(-1, 0), 0)).rgb);
 	vec3 nr = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point + ivec2(1, 0), 0)).rgb);
 	vec3 nd = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point + ivec2(0, -1), 0)).rgb);
@@ -83,7 +83,7 @@ void main()
 	normal_diff += normal_indicator(normal_edge_bias, n, nr, depth_diff);
 	normal_diff += normal_indicator(normal_edge_bias, n, nd, depth_diff);
 	normal_diff = smoothstep(0.01, 0.02, normal_diff);
-	//normal_diff = clamp(normal_diff-neg_depth_diff, 0., 1.);
+	normal_diff = clamp(normal_diff-(1.0-neg_depth_diff), 0., 1.);
 	
 	vec3 highlight_color = vec3(1.0);
 	float highlight_strength = 0.1;
@@ -102,6 +102,7 @@ void main()
 
 	//color.rgb = texelFetch(depth_tex, point, 0).rgb / texelFetch(depth_tex, point, 0).w;
 //color.rgb = vec3(normal_diff);
+//color.rgb = vec3(1.0-neg_depth_diff, normal_diff, 0.0);
 //color.rgb = vec3((texelFetch(depth_tex, point, 0).r));
 	imageStore(screen_tex, point, color);
 }
