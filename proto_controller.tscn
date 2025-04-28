@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bs72ogkvdd7d6"]
+[gd_scene load_steps=8 format=3 uid="uid://bs72ogkvdd7d6"]
 
 [ext_resource type="Script" uid="uid://pebyq4f1apv8" path="res://proto_controller.gd" id="1_ucva2"]
+[ext_resource type="Shader" uid="uid://bwye7xm5x1omc" path="res://SphereFilter.gdshader" id="2_d85cr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
 albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
@@ -12,6 +13,12 @@ height = 1.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iof21"]
 radius = 0.4
 height = 1.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jfawc"]
+render_priority = 0
+shader = ExtResource("2_d85cr")
+
+[sub_resource type="SphereMesh" id="SphereMesh_d85cr"]
 
 [node name="ProtoController" type="CharacterBody3D"]
 script = ExtResource("1_ucva2")
@@ -25,6 +32,11 @@ mesh = SubResource("CapsuleMesh_ucva2")
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_iof21")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+material_override = SubResource("ShaderMaterial_jfawc")
+mesh = SubResource("SphereMesh_d85cr")
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
