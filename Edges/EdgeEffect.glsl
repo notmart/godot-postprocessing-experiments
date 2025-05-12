@@ -35,6 +35,8 @@ float normal_indicator(vec3 normalEdgeBias, vec3 baseNormal, vec3 newNormal, flo
 	float normalDiff = dot(baseNormal - newNormal, normalEdgeBias);
 	float normalIndicator = clamp(smoothstep(-.01, .01, normalDiff), 0.0, 1.0);
 	float depthIndicator = clamp(sign(depth_diff * .25 + .0025), 0.0, 1.0);
+	//depthIndicator = normalIndicator=1.0;
+	return (1.0-dot(newNormal, baseNormal));
 	return (1.0 - dot(baseNormal, newNormal)) * depthIndicator * normalIndicator;
 }
 
@@ -51,7 +53,7 @@ void main()
 	vec4 color = imageLoad(screen_tex, point);
 	
 	float depth_diff = 0.0;
-	float neg_depth_diff = 0.5;
+	float neg_depth_diff = 0.0;//5;
 	float depth = texelFetch(depth_tex, point, 0).r;
 	float du = texelFetch(depth_tex, point + ivec2(0, 1), 0).r;
 	float dl = texelFetch(depth_tex, point + ivec2(-1, 0), 0).r;
@@ -65,9 +67,9 @@ void main()
 	neg_depth_diff += depth - dd;
 	neg_depth_diff += depth - dr;
 	neg_depth_diff += depth - dl;
-	neg_depth_diff = clamp(neg_depth_diff, 0., 1.);
-	neg_depth_diff = clamp(smoothstep(0.498, 0.502, neg_depth_diff)*10., 0., 1.);
-	depth_diff = smoothstep(0.00055, 0.00056, depth_diff);
+	//neg_depth_diff = clamp(neg_depth_diff, 0., 1.);
+	//neg_depth_diff = clamp(smoothstep(0.498, 0.502, neg_depth_diff)*10., 0., 1.);
+	//depth_diff = smoothstep(0.00055, 0.00056, depth_diff);
 	//depth_diff = 0.1;
 	vec3 n = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point, 0)).rgb);
 	
@@ -82,8 +84,8 @@ void main()
 	normal_diff += normal_indicator(normal_edge_bias, n, nl, depth_diff);
 	normal_diff += normal_indicator(normal_edge_bias, n, nr, depth_diff);
 	normal_diff += normal_indicator(normal_edge_bias, n, nd, depth_diff);
-	normal_diff = smoothstep(0.01, 0.02, normal_diff);
-	normal_diff = clamp(normal_diff-(1.0-neg_depth_diff), 0., 1.);
+	//normal_diff = smoothstep(0.01, 0.02, normal_diff);
+	//normal_diff = clamp(normal_diff-(1.0-neg_depth_diff), 0., 1.);
 	
 	vec3 highlight_color = vec3(1.0);
 	float highlight_strength = 0.1;
@@ -96,13 +98,16 @@ void main()
 	color.rgb = mix(color.rgb, final_shadow_color, depth_diff);
 	
 	//color = 1.0 - color;
-	//color.rgb = normal.rgb;
+	//color.rgb = n.rgb;
 	//color.rgb += normal_diff;
 	//color.rgb = normalize(normal_roughness_compatibility(texelFetch(normal_tex, point, 0)).rgb);
 
 	//color.rgb = texelFetch(depth_tex, point, 0).rgb / texelFetch(depth_tex, point, 0).w;
-//color.rgb = vec3(normal_diff);
-//color.rgb = vec3(1.0-neg_depth_diff, normal_diff, 0.0);
-//color.rgb = vec3((texelFetch(depth_tex, point, 0).r));
+
+//color.rgb = vec3((smoothstep(-0.0005, 0.0005, neg_depth_diff)-0.5) * 2.0 + 0.5);
+//color.rgb *= vec3((step(0.01, normal_diff) * (smoothstep(-0.0002, 0.0002, neg_depth_diff)-0.5)) * 1.2 + 1.0);
+color.rgb *= vec3(((smoothstep(-0.0002, 0.0002, neg_depth_diff)-0.5) * 1.5 + 1.0));
+//color.rgb = vec3(step(0.01, normal_diff));
+//color.rgb = vec3(depth_diff);
 	imageStore(screen_tex, point, color);
 }
