@@ -4,6 +4,7 @@ extends Node3D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$AnimationPlayer.play("camera", -1, 0.1)
+	$OmniLight3D/AnimationPlayer.play("flicker", -1, 0.5)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

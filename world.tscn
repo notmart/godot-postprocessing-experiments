@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://des0t20fd15xr"]
+[gd_scene load_steps=36 format=3 uid="uid://des0t20fd15xr"]
 
 [ext_resource type="Script" uid="uid://pp0syajxvnus" path="res://world.gd" id="1_70rjs"]
 [ext_resource type="Script" uid="uid://hiia22uiwhpa" path="res://Palette/PaletteEffect.gd" id="1_crcgp"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://va4h65d4kfre" path="res://Assets/dungeon/dungeon_assets/building/wall.glb" id="5_a8iyw"]
 [ext_resource type="PackedScene" uid="uid://2fgl77jqwidx" path="res://Assets/dungeon/dungeon_assets/building/wall_window_closed.glb" id="7_msppe"]
 [ext_resource type="PackedScene" uid="uid://drxhs0g4elt84" path="res://Assets/dungeon/dungeon_assets/props/coin_stack.glb" id="8_0vc3n"]
+[ext_resource type="MeshLibrary" uid="uid://c4s8aolsms3p8" path="res://Assets/basicdungeon/BasicDungeon.tres" id="11_ic0uy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eecae"]
 
@@ -20,11 +21,12 @@ sky_material = SubResource("ProceduralSkyMaterial_eecae")
 background_mode = 2
 sky = SubResource("Sky_wkjrr")
 tonemap_mode = 2
+glow_enabled = true
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_oqxcd"]
 resource_local_to_scene = false
 resource_name = ""
-enabled = false
+enabled = true
 effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
@@ -136,6 +138,44 @@ _data = {
 &"camera": SubResource("Animation_snpev")
 }
 
+[sub_resource type="Animation" id="Animation_ic0uy"]
+resource_name = "flicker"
+length = 0.25
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0254064, 0.0725896, 0.115538, 0.150623, 0.183894, 0.215954),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.5, 0.8, 0.6, 1.0, 0.7, 0.45]
+}
+
+[sub_resource type="Animation" id="Animation_k3n1d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2o6r5"]
+_data = {
+&"RESET": SubResource("Animation_k3n1d"),
+&"flicker": SubResource("Animation_ic0uy")
+}
+
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_70rjs")
 
@@ -146,12 +186,13 @@ compositor = SubResource("Compositor_dtxo0")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.885491, 0.156748, -0.43742, 0, 0.941382, 0.337342, 0.464657, -0.298713, 0.833586, 0, 3.92657, 0)
 shadow_enabled = true
+shadow_opacity = 0.8
 
 [node name="ProtoController" parent="." instance=ExtResource("3_36xkr")]
 can_sprint = true
 
 [node name="plane" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.643142, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.643142, -0.0730257, 0)
 mesh = SubResource("PlaneMesh_l05dv")
 surface_material_override/0 = SubResource("ShaderMaterial_snk77")
 
@@ -205,3 +246,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09693, -4.76837e-07, -2.456
 
 [node name="coin_stack" parent="." instance=ExtResource("8_0vc3n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.29757, 4.76837e-07, 2.06166)
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("11_ic0uy")
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(5, 5, 0, 5, 9, 1, 5, 8, 0, 5, 7, 0, 5, 4, 0, 5, 3, 0, 5, 2, 1441793, 6, 2, 1441792, 7, 2, 1441792, 8, 2, 1441792, 9, 2, 1441792, 10, 2, 1441792, 11, 2, 1441792, 12, 2, 1441792, 13, 2, 1441792, 14, 2, 655361, 14, 3, 655360, 14, 4, 655360, 14, 5, 655360, 14, 6, 655360, 14, 7, 655360, 14, 8, 655360, 14, 9, 1048577, 13, 9, 1048576, 12, 9, 1048576, 11, 9, 1048576, 10, 9, 1048576, 9, 9, 1048576, 8, 9, 1048576, 7, 9, 1048576, 6, 9, 1048576, 6, 8, 1048578, 6, 7, 1048578, 7, 7, 1048578, 8, 7, 1048578, 8, 6, 1048578, 9, 6, 1048578, 7, 8, 1048578, 8, 8, 1048578, 9, 8, 1048578, 10, 8, 1048578, 11, 8, 1048578, 12, 8, 1048578, 13, 8, 1048578, 13, 6, 1048578, 13, 7, 1048578, 11, 7, 1048578, 12, 7, 1048578, 9, 7, 1048578, 10, 7, 1048578, 6, 6, 1048578, 7, 6, 1048578, 5, 6, 1048578, 12, 6, 1048578, 11, 6, 1048578, 10, 6, 1048578, 9, 5, 1048578, 8, 5, 1048578, 8, 4, 1048578, 8, 3, 1048578, 7, 3, 1048578, 6, 3, 1048578, 6, 4, 1048578, 6, 5, 1048578, 7, 5, 1048578, 7, 4, 1048578, 9, 4, 1048578, 9, 3, 1048578, 10, 3, 1048578, 11, 3, 1048578, 12, 3, 1048578, 13, 3, 1048578, 13, 4, 1048578, 13, 5, 1048578, 11, 4, 1048578, 11, 5, 1048578, 12, 5, 1048578, 12, 4, 1048578, 10, 4, 1048578)
+}
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.5924, 1.52629, 4.98587)
+light_color = Color(1, 0.822333, 0.59, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OmniLight3D"]
+libraries = {
+&"": SubResource("AnimationLibrary_2o6r5")
+}
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.5924, 1.52629, 9.9232)
+light_color = Color(1, 0.822333, 0.59, 1)
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.5924, 1.52629, 14.027)
+light_color = Color(1, 0.822333, 0.59, 1)

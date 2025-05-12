@@ -45,7 +45,7 @@ void main() {
 	m *= 0.02;
 	
 	//color = color + vec4(m, m, m, 1.0);
-	color += m;
+	//color += m;
 	//color = floor(color * 15.0 - 0.5) / (15.0);
 
 	ivec2 paletteSize = ivec2(16);//textureSize(palette_tex);
@@ -63,7 +63,7 @@ void main() {
 		}
 	}
 	//color = bestColor;
-	color = floor(color * 32.0 - 0.5) / (32.0);
+	color = floor(color * 64.0 - 0.5) / (64.0);
 
 	imageStore(screen_tex, point, color);
 }

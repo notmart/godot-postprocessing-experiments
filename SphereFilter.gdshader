@@ -24,12 +24,11 @@ void fragment() {
 	//m = rand(point) - 0.5;
 	//m = rand(vec2(float(x), float(y))) - 0.5;
 	m *= 0.01;
-	
+
 	ALBEDO = texture(screen_texture, SCREEN_UV).rgb;
 	ALBEDO -= m;
 	ALBEDO = floor(ALBEDO * 64.0) / (64.0);
 	//ALBEDO = vec3(0.0);
-	
+
 	//ALPHA = m;
 }
-

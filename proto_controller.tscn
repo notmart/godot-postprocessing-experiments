@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bs72ogkvdd7d6"]
 
 [ext_resource type="Script" uid="uid://pebyq4f1apv8" path="res://proto_controller.gd" id="1_ucva2"]
-[ext_resource type="Shader" uid="uid://dlyf85huht3q" path="res://SphereFilter.gdshader" id="2_d85cr"]
+[ext_resource type="Shader" uid="uid://bwye7xm5x1omc" path="res://SphereFilter.gdshader" id="2_d85cr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
 albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
